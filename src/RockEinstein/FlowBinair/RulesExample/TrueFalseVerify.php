@@ -1,6 +1,6 @@
 <?php
 
-namespace RockFlow\Workflow\Rules;
+namespace RockEinstein\FlowBinair\RulesExample;
 
 /**
  * Description of TrueFalseVerify

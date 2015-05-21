@@ -1,6 +1,6 @@
 <?php
 
-namespace RockFlow\Workflow;
+namespace RockEinstein\FlowBinair;
 
 /**
  * Description of ObjectManager

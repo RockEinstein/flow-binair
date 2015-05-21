@@ -1,12 +1,12 @@
 {
-    "name": "FlowBinair/RockFlow",    
+    "name": "rockeinstein/flow-binair",    
     "license": "BSD-3-Clause",
     "require": {
         "php": ">=5.3.3"
     },
     "autoload": {
         "psr-0": {
-            "RockFlow\\Workflow\\": "src/"
+            "RockEinstein\\FlowBinair\\": "src/"
         }
     }
 }
