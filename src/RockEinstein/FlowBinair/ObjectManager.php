@@ -33,14 +33,41 @@ class ObjectManager {
         return $this;
     }
 
-    public function process() {
+    public function process($params = array()) {
         if (class_exists($this->objectPath)) {
-            $objectHandler = new $this->objectPath();
-            $method = $this->method;
-            $response = $objectHandler->$method();
-            return $response;
+            $reflection = new \ReflectionClass($this->objectPath);
+            $methods = $reflection->getMethods();
+
+            foreach ($methods as $m) {
+                if ($m->getName() == $this->method) {
+                    $parameters = $m->getParameters();
+                    $args = array();
+
+                    if (empty($parameters)) {
+                        $class = new $this->objectPath;
+                        $method = $this->method;
+                        return $class->$method();
+                    } else {
+                        foreach ($parameters as $p) {
+                            try {
+                                $defVal = $p->getDefaultValue();
+                                $args[] = $defVal;
+                            } catch (\Exception $e) {
+                                if (!array_key_exists($p->getName(), $params)) {
+                                    throw new \Exception('Required parameter not found: ' . $p->getName());
+                                }
+
+                                $args[] = $params[$p->getName()];
+                            }
+                        }
+
+                    }
+
+                    return $m->invokeArgs(new $this->objectPath, $args);
+                }
+            }
         } else {
-            throw new \Exception("Classe " . $this->objectPath . " não existe");
+            throw new \Exception("Class " . $this->objectPath . " doesn't exists");
         }
     }
 }

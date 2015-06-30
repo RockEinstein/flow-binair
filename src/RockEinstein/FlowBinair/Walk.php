@@ -2,14 +2,8 @@
 
 namespace RockEinstein\FlowBinair;
 
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-
 /**
- * Description of Walk
+ * Description of Walk - To move over a surface by taking steps with the feet at a pace slower than a run. :)
  *
  * @author anderson
  */
@@ -28,7 +22,8 @@ class Walk {
         $this->token = $token;
     }
 
-    public function advanceTo($requestStep) {
+    public function advanceTo($requestStep, $params) {
+
         try {
             if ($requestStep == $this->token) {
                 throw new \Exception("Can't advance to same step");
@@ -41,7 +36,7 @@ class Walk {
             } elseif (array_key_exists($requestStep, $canAdvanceTo)) {
                 $conditionProcessor = new ConditionProcessor($canAdvanceTo[$requestStep]);
 
-                if ($conditionProcessor->prepare()->process()) {
+                if ($conditionProcessor->prepare()->process($params)) {
                     $this->token = $requestStep;
                     return $requestStep;
                 }
