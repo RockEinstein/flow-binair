@@ -11,9 +11,6 @@ class ConditionProcessor {
 
     private $condition;
     private $preProcessed;
-    private $stack = 0;
-    private $result;
-    private $nextResult;
     private $operator;
 
     public function __construct($condition) {
@@ -34,8 +31,9 @@ class ConditionProcessor {
      * @return Bool
      * @throws \Exception
      */
-    public function process() {
+    public function process($params = array()) {
         $group = "";
+        $val = false;
 
         $generalString = "";
         $closeParenthesis = "";
@@ -70,7 +68,7 @@ class ConditionProcessor {
             }
 
             if ($group != "") {                
-                $preResponse = $this->processObject($group);
+                $preResponse = $this->processObject($group, $params);
                 if ($preResponse == false) {
                     $generalString .= " " . 0 . " ";
                 } else {
@@ -80,24 +78,27 @@ class ConditionProcessor {
                 $generalString .= $closeParenthesis;
                 $closeParenthesis = "";
 
-
                 $group = "";
             }
         }
-        echo "--> " . $generalString . " = ";
+
         if ($parenthesisControl == 0) {
             $generalString = "\$val = $generalString;";
             eval($generalString);
         } else {
             throw new \Exception("Parenthesis in excess");
         }
-        echo $val . "\n";
+
         return $val;
     }
 
-    public function processObject($path) {
+    public function processObject($path, $params) {
         $objectManager = new ObjectManager($path);
-        $response = $objectManager->prepare()->process();
+        $response = $objectManager->prepare()->process($params);
+
+        if (!is_bool($response)) {
+            throw new \Exception("Invalid {$path} response type: must be boolean");
+        }
 
         return $response;
     }
