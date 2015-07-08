@@ -14,7 +14,7 @@ class ObjectManager {
     private $method;
 
     public function __construct($path) {
-        $this->path = $path;
+        $this->path = trim($path);
 
         return $this;
     }
