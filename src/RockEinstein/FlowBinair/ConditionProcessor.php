@@ -67,6 +67,7 @@ class ConditionProcessor {
                 }
             }
 
+            $group = trim($group);
             if ($group != "") {                
                 $preResponse = $this->processObject($group, $params);
                 if ($preResponse == false) {
